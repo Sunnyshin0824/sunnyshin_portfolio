@@ -1,3 +1,3 @@
-# Testrepo
+# Sunny Shin Portfolio
 Coursera Test
 making changes
