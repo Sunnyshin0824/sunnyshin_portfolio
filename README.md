@@ -1,13 +1,12 @@
 <h1 align="left"> Hey there, I'm Sunny 👋 </h1>
 
-![](https://cdn.hackernoon.com/images/ckxz-5-f-75-v-00-z-00-as-638-qw-6-ofc.jpg)
-
 <p align="left">
    <a href="https://www.linkedin.com/in/sunnyshin01/"><img alt="LinkedIn" src="https://img.shields.io/badge/-sunnyshin-black?style=flat-square&logo=Linkedin&logoColor=white&link=https://www.linkedin.com/in/sunnyshin01/"></a>
+   <a href="https://github.com/sunnyshin0824/sunnyshin_portfolio.git/"><img alt="GitHub" src="https://github.com/sunnyshin0824/sunnyshin_portfolio.git/badge/-GitHub-black?style=flat-square&logo=squarespace&logoColor=white&link=https://github.com/sunnyshin0824/sunnyshin_portfolio.git/"></a>
    <a href="mailto:sunnyshin0824@gmail.com"><img alt="Gmail" src="https://img.shields.io/badge/-sunnyshin0824@gmail.com-black?style=flat-square&logo=Gmail&logoColor=white&link=mailto:sunnyshin0824@gmail.com"></a>
 </p>
 
-<h3 align="left">  I'm a program manager at Airbnb who is interested in data analytics and applied machine learning. Enthusiast of data visualization and Natural Language Processing (NLP). </h3>
+<h3 align="left">  I'm a program manager at Airbnb who is interested in data analytics and applied machine learning. Enthusiast of financials and data visualization. </h3>
 
 =======
 
