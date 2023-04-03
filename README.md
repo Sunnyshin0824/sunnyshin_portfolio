@@ -6,7 +6,7 @@
    <a href="mailto:sunnyshin0824@gmail.com"><img alt="Gmail" src="https://img.shields.io/badge/-sunnyshin0824@gmail.com-black?style=flat-square&logo=Gmail&logoColor=white&link=mailto:sunnyshin0824@gmail.com"></a>
 </p>
 
-<h3 align="left">  I'm a program manager at Airbnb who is interested in data analytics and applied machine learning. I have a passion for exploring, analyzing and drawing insights from data. My skills in statistics, machine learning, and data visualization help me to uncover hidden patterns, make accurate predictions and communicate findings in a clear and meaningful way. </h3>
+<h3 align="left">  I'm a program manager at Airbnb who is interested in data analytics and applied machine learning. </h3>
 
 ---
 
@@ -21,4 +21,10 @@
 - 😄 **Pronouns:** she/her
 
 ---
-<h3 align="left">  In this portfolio, you will find examples of my data science projects, demonstrating my ability to work with diverse datasets and create impactful solutions. Whether it's building predictive models or designing interactive dashboards, I strive to make data-driven decisions accessible and actionable. </h3>
+
+<h4 align="left"> I have a passion for exploring, analyzing and drawing insights from data. My skills in statistics, machine learning, and data visualization help me to uncover hidden patterns, make accurate predictions and communicate findings in a clear and meaningful way. </h4>
+
+<!-- credits for gif https://imgur.com/gallery/OOpRj -->
+<img align="center" height="150" width="210" src="data.gif">
+
+<h4 align="left">  In this portfolio, you will find examples of my data science projects, demonstrating my ability to work with diverse datasets and create impactful solutions. Whether it's building predictive models or designing interactive dashboards, I strive to make data-driven decisions accessible and actionable. </h4>
