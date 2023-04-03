@@ -21,4 +21,4 @@
 - 😄 **Pronouns:** she/her
 
 ---
-<h3 align="left">  In this portfolio, you will find examples of my data science projects, demonstrating my ability to work with diverse datasets and create impactful solutions. Whether it's building predictive models or designing interactive dashboards, I strive to make data-driven decisions accessible and actionable. Thank you for taking the time to explore my work, and please feel free to reach out if you have any questions or collaboration opportunities! </h3>
+<h3 align="left">  In this portfolio, you will find examples of my data science projects, demonstrating my ability to work with diverse datasets and create impactful solutions. Whether it's building predictive models or designing interactive dashboards, I strive to make data-driven decisions accessible and actionable. </h3>
