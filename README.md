@@ -23,5 +23,4 @@
 
 ---
 
-
 <h4 align="left">  In this portfolio, you will find examples of my data science projects, demonstrating my ability to work with diverse datasets and create impactful solutions. Whether it's building predictive models or designing interactive dashboards, I strive to make data-driven decisions accessible and actionable. </h4>
