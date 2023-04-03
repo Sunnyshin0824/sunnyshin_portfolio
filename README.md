@@ -12,7 +12,7 @@
 
 ---
 <!-- credits for gif https://imgur.com/OOpRj -->
-<img align="right" height="150" width="210" src="C:\Users\sunny\Desktop\data.gif">
+<img align="right" height="150" width="210" src="data.gif">
 
 - 🔭 **I’m currently working on:** ML models
 - 🌱 **I’m currently learning:** data science and applied machine learning
