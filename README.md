@@ -6,9 +6,9 @@
    <a href="mailto:sunnyshin0824@gmail.com"><img alt="Gmail" src="https://img.shields.io/badge/-sunnyshin0824@gmail.com-black?style=flat-square&logo=Gmail&logoColor=white&link=mailto:sunnyshin0824@gmail.com"></a>
 </p>
 
-<h3 align="left">  I'm a program manager at Airbnb who is interested in data analytics and applied machine learning. Enthusiast of financials and data visualization. </h3>
+<h3 align="left">  I'm a program manager at Airbnb who is interested in data analytics and applied machine learning. I have a passion for exploring, analyzing and drawing insights from data. My skills in statistics, machine learning, and data visualization help me to uncover hidden patterns, make accurate predictions and communicate findings in a clear and meaningful way. In this portfolio, you will find examples of my data science projects, demonstrating my ability to work with diverse datasets and create impactful solutions. Whether it's building predictive models or designing interactive dashboards, I strive to make data-driven decisions accessible and actionable. Thank you for taking the time to explore my work, and please feel free to reach out if you have any questions or collaboration opportunities! </h3>
 
-=======
+---
 
 <!-- credits for gif https://imgur.com/OOpRj -->
 <img align="right" height="150" width="210" src="data.gif">
@@ -20,6 +20,4 @@
 - ⚡ **Hobbies:** running, hiking, pet my dogs
 - 😄 **Pronouns:** she/her
 
-=======
-
-<a href="https://dewith.co/"><img height="150px" src="https://github-readme-stats.vercel.app/api?username=dewith&show_icons=true&hide_title=true&hide_border=true&theme=graywhite" /><img height="150px" src="https://github-readme-stats.vercel.app/api/top-langs/?username=dewith&show_icons=true&layout=compact&langs_count=6&hide_title=true&hide_border=true&theme=graywhite" /></a>
+---
