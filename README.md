@@ -1,8 +1,7 @@
 <h1 align="left"> Hey there, I'm Sunny 👋 </h1>
 
 <p align="left">
-   <a href="https://www.linkedin.com/in/sunnyshin01/"><img alt="LinkedIn" src="https://img.shields.io/badge/-sunnyshin-black?style=flat-square&logo=Linkedin&logoColor=white&link=https://www.linkedin.com/in/sunnyshin01/"></a>
-    <a href="https://www.linkedin.com/in/sunnyshin01/"><img alt="LinkedIn" src="https://brand.linkedin.com/assets/icons/linkedin/Li-In-Bug.png&link=https://www.linkedin.com/in/sunnyshin01/"></a>
+   <a href="https://www.linkedin.com/in/sunnyshin01/"><img alt="LinkedIn" src="https://img.shields.io/badge/-sunnyshin-blue?style=flat-square&logo=Linkedin&logoColor=white&link=https://www.linkedin.com/in/sunnyshin01/"></a>
    <a href="https://github.com/sunnyshin0824/sunnyshin_portfolio.git"><img alt="GitHub" src="https://img.shields.io/badge/sunnyshin0824-black?style=flat-square&logo=github&logoColor=white&link=https://github.com/sunnyshin0824/sunnyshin_portfolio.git/"></a>
    <a href="mailto:sunnyshin0824@gmail.com"><img alt="Gmail" src="https://img.shields.io/badge/-sunnyshin0824@gmail.com-black?style=flat-square&logo=Gmail&logoColor=white&link=mailto:sunnyshin0824@gmail.com"></a>
 </p>
