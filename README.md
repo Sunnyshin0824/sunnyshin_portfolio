@@ -3,7 +3,7 @@
 <p align="left">
    <a href="https://www.linkedin.com/in/sunnyshin01/"><img alt="LinkedIn" src="https://img.shields.io/badge/-sunnyshin-blue?style=flat-square&logo=Linkedin&logoColor=white&link=https://www.linkedin.com/in/sunnyshin01/"></a>
    <a href="https://github.com/sunnyshin0824/sunnyshin_portfolio.git"><img alt="GitHub" src="https://img.shields.io/badge/sunnyshin0824-black?style=flat-square&logo=github&logoColor=white&link=https://github.com/sunnyshin0824/sunnyshin_portfolio.git/"></a>
-   <a href="mailto:sunnyshin0824@gmail.com"><img alt="Gmail" src="https://img.shields.io/badge/-sunnyshin0824@gmail.com-black?style=flat-square&logo=Gmail&logoColor=white&link=mailto:sunnyshin0824@gmail.com"></a>
+   <a href="mailto:sunnyshin0824@gmail.com"><img alt="Gmail" src="https://img.shields.io/badge/-sunnyshin0824@gmail.com-red?style=flat-square&logo=Gmail&logoColor=white&link=mailto:sunnyshin0824@gmail.com"></a>
 </p>
 
 <h3 align="left">  I'm a program manager at Airbnb who is interested in data analytics and applied machine learning. </h3>
