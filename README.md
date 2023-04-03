@@ -10,9 +10,6 @@
 
 ---
 
-<!-- credits for gif https://imgur.com/OOpRj -->
-<img align="right" height="150" width="210" src="C:/Users/sunny/Documents/GitHub/sunnyshin_portfolio/data.gif">
-
 - 🔭 **I’m currently working on:** ML models
 - 🌱 **I’m currently learning:** data science and applied machine learning
 - 👯 **I’m currently completing a degree in:** Master of Information and Data Science at UC Berkeley
@@ -24,7 +21,7 @@
 
 <h4 align="left"> I have a passion for exploring, analyzing and drawing insights from data. My skills in statistics, machine learning, and data visualization help me to uncover hidden patterns, make accurate predictions and communicate findings in a clear and meaningful way. </h4>
 
-<!-- credits for gif https://imgur.com/gallery/OOpRj -->
-<img align="center" height="150" width="210" src="./data.gif">
+<!-- credits for gif https://imgur.com/OOpRj -->
+<img align="right" height="150" width="210" src="C:/Users/sunny/Documents/GitHub/sunnyshin_portfolio/data.gif">
 
 <h4 align="left">  In this portfolio, you will find examples of my data science projects, demonstrating my ability to work with diverse datasets and create impactful solutions. Whether it's building predictive models or designing interactive dashboards, I strive to make data-driven decisions accessible and actionable. </h4>
