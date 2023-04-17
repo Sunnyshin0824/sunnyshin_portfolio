@@ -6,7 +6,7 @@
    <a href="mailto:sunnyshin0824@gmail.com"><img alt="Gmail" src="https://img.shields.io/badge/-sunnyshin0824@gmail.com-red?style=flat-square&logo=Gmail&logoColor=white&link=mailto:sunnyshin0824@gmail.com"></a>
 </p>
 
-<h3 align="left">  I'm a program manager at Airbnb who is interested in data analytics and applied machine learning. </h3>
+<h3 align="left">  I'm a full-time program manager at Airbnb and a part-time student who is enthusiastic about data analytics and applied machine learning. </h3>
 
 <h4 align="left"> I have a passion for exploring, analyzing and drawing insights from data. My skills in statistics, machine learning, and data visualization help me to uncover hidden patterns, make accurate predictions and communicate findings in a clear and meaningful way. </h4>
 
