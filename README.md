@@ -8,19 +8,19 @@
 
 <h3 align="left">  I'm a full-time program manager at Airbnb and a part-time student who is enthusiastic about data analytics and applied machine learning. </h3>
 
-<h4 align="left"> I have a passion for exploring, analyzing and drawing insights from data. My skills in statistics, machine learning, and data visualization help me to uncover hidden patterns, make accurate predictions and communicate findings in a clear and meaningful way. </h4>
+<h4 align="left"> I have a strong passion for delving into data, extracting valuable insights, and communicating these findings effectively. My expertise in business analytics, machine learning, and data visualization empowers me to unearth patterns, make predictions, and convey these discoveries in a comprehensible and impactful manner. </h4>
 
 ---
 <!-- credits for gif https://imgur.com/OOpRj -->
 <img align="right" height="150" width="210" src="data.gif">
 
-- 🔭 **I’m currently working on:** ML models
-- 🌱 **I’m currently learning:** data science and applied machine learning
+- 🔭 **I’m currently working on:** exploring different machine learning models and techniques
+- 🌱 **I’m currently learning:** business analytics and machine learning at scale
 - 👯 **I’m currently completing a degree in:** Master of Information and Data Science at UC Berkeley
-- 💬 **Ask me about:** data science, taxes/accounting, Shiba Inus
-- ⚡ **Hobbies:** running, hiking, pet my dogs
+- ⭐ **I'm expecting to graduate in:** May 2024!
+- 💬 **Hobbies:** running, hiking, petting my dogs, hanging out with friends in PNW weather
 - 😄 **Pronouns:** she/her
 
 ---
 
-<h4 align="left">  In this portfolio, you will find examples of my data science projects, demonstrating my ability to work with diverse datasets and create impactful solutions. Whether it's building predictive models or designing interactive dashboards, I strive to make data-driven decisions accessible and actionable. </h4>
+<h4 align="left">  Within this portfolio, you will discover a collection of my data science projects, showcasing my proficiency in handling varied datasets and crafting impactful solutions. Whether I'm constructing predictive models or crafting interactive dashboards, my objective is to render data-driven insights accessible and actionable, empowering informed decision-making. </h4>

@@ -1,0 +1,307 @@
+---
+title: "W203 Lab 2"
+subtitle: Mark’s Minions Group 1 Sec 3 \linebreak Abel Ninan, Collin Chee, Dan Nelon, Sunny Shin
+geometry: "left=2cm,right=2cm,top=2cm,bottom=2cm"
+output: pdf_document
+urlcolor: blue
+---
+#### 1. Importance and Context
+\hfill\break
+There are many aspects of what makes a movie rise to the top of the box office.  Genre is one aspect that can be considered by viewers when deciding on a movie. The genre creates a certain level of expectation for the audience, opting for a specific experience. Consequently, the size of the potential audience may vary depending on the genre. The global movie industry generates hundreds of billions of revenue each year and our client, Minions Production, posed us with a question of whether there is a relationship between the genre of a movie and the revenue. 
+
+Our study seeks to provide an answer to this question by exploring the effect of various factors on revenue using statistical models. In particular, we build linear regression models to examine the relationships between revenue and genre while controlling for movie budget and release year. Answering this question will play a huge role in the next phase of movie productions for our client. If a certain genre of a movie is showing a positive trend, there may be an opportunity for investment in that specific genre, in turn maximizing revenues. 
+
+```{r, setup, include=FALSE, echo=FALSE, message=FALSE}
+library(tidyverse)
+library(stargazer) 
+library(sandwich)
+library(ggplot2)
+library(lmtest)
+library(scales)
+library(caret)
+```
+```{r, exploratory data analysis, echo=FALSE, message=FALSE}
+#import file
+suppressWarnings({df <- read.csv('movies.csv')
+#reformat fields
+df$release_date <- as.Date(df$release_date, format = "%Y-%m-%d")
+df$release_year <- format(df$release_date, format = "%Y")
+df$budget <- as.numeric(df$budget)
+df$revenue <- as.numeric(df$revenue)
+#select the fields we care about for our analysis
+df <- df %>% select(budget, genres, release_year, revenue, title)
+#made an assumption that any movie before 2000 is irrelevant and not applicable for our analysis
+#removing any data points with 0 budget and revenue as they are not applicable
+#df <- filter(df, (release_year >= "2014" & release_year < "2017")  & (budget > 100000 & revenue > 100000))
+df_time <- filter(df, (release_year >= "2014" & release_year < "2017") & (budget > 0 & revenue > 0))
+#group data by release year
+#df_by_year <-[- df_time_split,] df %>% group_by(release_year)
+#bar graph to see the number of data points
+# p <- ggplot(data=df_by_year, aes(x=release_year))+
+#   geom_bar()+
+#   theme(axis.text.x = element_text(angle=45))
+# p
+
+set.seed(42)
+df_time_split = sort(sample(nrow(df_time), nrow(df_time)*0.7))
+train <- df_time[df_time_split,]
+test <- df_time[-df_time_split,]
+})
+```
+#### 2. Data and Methodology
+\hfill\break
+Our analysis leverages data from [Kaggle](https://www.kaggle.com/datasets/rounakbanik/the-movies-dataset?select=movies_metadata.csv) dataset pulled from The Movie Database (TMD) web API. The data was collected by GroupLens Research that specializes in recommender systems, online communities, mobile and ubiquitous technologies, digital libraries, and local geographic information systems. The dataset contains 45,466 movies from 1989 through 2017 with basic information such as title, budget, revenue, release dates, languages, IMDB movie ID, status, production countries and companies. Knowing the fast paced nature of the movie industry, our team had determined to narrow down the dataset to only more recent years to better fit to our client’s interest. Additionally, past movies produced with little to no budget would not help answer our client’s questions as they were looking for investment opportunities and therefore those movies were also removed from consideration. 
+
+Based on our exploratory data analysis (EDA) such as plotting the distribution of some predictor variables such as genre, year and budget, we discovered that 2014, 2015 and 2016 have the most reliable data, which helped narrow down our data set to approximately 660 observations. 
+Given the data size and the number of different genres, we decided to begin by splitting the dataset into a 30% exploratory set and a 70% confirmation set. We used the exploratory dataset to discover any patterns, spot anomalies and check assumptions to gather as many insights from it. 
+\newpage
+```{r, fig.align='center', fig.dim = c(8,5), echo=FALSE, message=FALSE}
+# actually not a ton of points to be concerned about.. can check with cooks distance once fit or somethign else after. 
+ggplot(data=test, aes(x=budget , y = revenue))+
+  geom_point()+
+  ggtitle("Figure 1. EDA - Revenue vs. Budget")+
+  theme(plot.title = element_text(hjust = 0.5), text=element_text(size=10, family="serif"))+
+  xlab("Budget ($Million)")+
+  scale_x_continuous(labels = unit_format(unit = "M", scale = 1e-6))+
+  scale_y_continuous(labels = unit_format(unit = "B", scale = 1e-9))+
+  ylab("Revenue ($Billion)")+
+  geom_smooth(method = "lm", se = TRUE)
+#\begin{center}
+#Figure 1. Gross Revenue vs. Budget
+#\end{center}
+```
+To operationalize the budget, we used the total amount of money listed under budget. As shown in Figure 1 indicating budget vs revenue, we can see there is a visual linear trend between the two variables. Therefore, we did not have to perform any transformations to the budget when we incorporate it into our regression model.
+
+During the EDA phase, we also learned that a film can belong to multiple genres, so we instead assigned an indicator variable of just two values: 0 and 1 one hot encoding method to indicate the absence or presence of a discrete genre. In our observations, there were the following 17 genres: *Drama, Comedy, Fantasy, War, Western, Science Fiction, History, Romance, Family, Mystery, Animation, Crime, Thriller, Action, Horror, Documentary, and Adventure.*
+
+Finally, we built a linear regression model of the response variable revenue vs. genre and budget to explore the relationship between the predictor and response variables. We will specifically use an ordinary least squares regression instead of a classical linear model due to our large sample size. The original regression model contained all 17 different genres, budget, and release years. 
+
+After some initial testing, we found that only budget and the animation genre produced significant coefficients.
+
+Additionally, considering the different levels of budget required to produce certain movies (due to additional production costs, such as special effects), an interaction term between budget and genre was considered. The linear regression was as follows.
+\fontsize{13}{22}
+$\hat{Revenue} = \beta_0 + \beta_1Budget + \beta_2Animation + \beta_3(Animation*Budget)$
+\end{center}
+\newpage
+```{r, message=FALSE, echo=FALSE}
+## box plots for the various years look different enough to include as a feature initially. May not be as clear as theory of 2014 has had an extra year so sales should be higher than 2015 than 2016 etc. Other things like movie ticket price could impact this. Or just that most of the sales happen in first year or so after a movie is released. 
+#ggplot(data=df_time, aes(x = release_year , y = revenue))+
+#  geom_point() + geom_boxplot()
+```
+```{r, indexing test set df_mod_test, echo=FALSE, message=FALSE}
+## split out the genre feature to being usable indicators
+DramaInd <- ifelse(grepl("Drama", test$genre),1,0)
+ComedyInd <- ifelse(grepl("Comedy", test$genre),1,0)
+FantasyInd <- ifelse(grepl("Fantasy", test$genre),1,0)
+WarInd <- ifelse(grepl("War", test$genre),1,0)
+WesternInd <- ifelse(grepl("Western", test$genre),1,0)
+SciFiInd <- ifelse(grepl("Science Fiction", test$genre),1,0)
+HistoryInd <- ifelse(grepl("History", test$genre),1,0)
+RomanceInd <- ifelse(grepl("Romance", test$genre),1,0)
+FamilyInd <- ifelse(grepl("Family", test$genre),1,0)
+MysteryInd <- ifelse(grepl("Mystery", test$genre),1,0)
+AnimationInd <- ifelse(grepl("Animation", test$genre),1,0)
+CrimeInd <- ifelse(grepl("Crime", test$genre),1,0)
+ThrillerInd <- ifelse(grepl("Thriller", test$genre),1,0)
+ActionInd <- ifelse(grepl("Action", test$genre),1,0)
+HorrorInd <- ifelse(grepl("Horror", test$genre),1,0)
+DocumentaryInd <- ifelse(grepl("Documentary", test$genre),1,0)
+df_mod_test <- cbind(test[,c(1,3,4,5)], DramaInd, ComedyInd, FantasyInd, WarInd, WesternInd, SciFiInd,HistoryInd, RomanceInd, FamilyInd, MysteryInd, AnimationInd, CrimeInd, ThrillerInd, ActionInd, HorrorInd, DocumentaryInd)
+
+```
+```{r, message=FALSE, echo=FALSE}
+#create pairs plot
+#ggpairs(df_mod)
+#summary(df_mod)
+
+#boxplot(revenue ~ budget, data = df_mod, xlab = "Genre",
+#        ylab = "Revnue", main = "Revenue vs. Budget per Genre")
+
+```
+#### 3. Results
+\hfill\break
+```{r, test model 1 rev~budget, message=FALSE, echo=FALSE}
+#model 1 revenue = budget
+model_1 = lm(revenue ~ budget, data = df_mod_test)
+
+#coeftest(model_1, vcov = vcovHC(model_1))
+```
+```{r, test model 2 rev~budget+release year, message=FALSE, echo=FALSE}
+#model 2 revenue = budget + release year
+model_2 = lm(revenue ~ budget + release_year, data = df_mod_test)
+
+#coeftest(model_2, vcov = vcovHC(model_2))
+
+#anova(model_1, model_2, test = "F")
+
+#waldtest(model_1, model_2, vcov = vcovHC(model_2, type = "HC0"))
+
+```
+```{r, test model 3 rev~budget+genres, message=FALSE, echo=FALSE}
+#model 3 revenue = budget + genre
+
+model_3 <- lm(revenue ~ budget + DramaInd + ComedyInd + FantasyInd + WarInd + WesternInd + SciFiInd +HistoryInd + RomanceInd + FamilyInd + MysteryInd + AnimationInd + CrimeInd + ThrillerInd + ActionInd + HorrorInd + DocumentaryInd, data = df_mod_test)
+
+#coeftest(model_3, vcov = vcovHC(model_3))
+
+#waldtest(model_1, model_3, vcov = vcovHC(model_3, type = "HC0"))
+#anova(model_1, model_3, test = "F")
+
+```
+```{r, message=FALSE, echo=FALSE}
+#model 4 revenue = budget + release year + genre
+#model_4<- lm(revenue ~ budget + release_year + DramaInd + ComedyInd + FantasyInd + WarInd + WesternInd + SciFiInd +HistoryInd + RomanceInd + FamilyInd + MysteryInd + AnimationInd + CrimeInd + ThrillerInd + ActionInd + HorrorInd + DocumentaryInd, data = df_mod)
+
+#coeftest(model_4, vcov = vcovHC(model_4))
+
+#anova(model_1, model_4, test = "F")
+
+#waldtest(model_3, model_4, vcov = vcovHC(model_4, type = "HC0"))
+
+
+```
+```{r, test model 4 rev~budget+animation, stargazer, message=FALSE, echo=FALSE}
+#model 4 revenue ~ budget + animation. Based on the coef test from previous models of genre
+model_4 <- lm(revenue ~ budget + AnimationInd, data = df_mod_test)
+#coeftest(model_4, vcov = vcovHC(model_4))
+
+#waldtest(model_1, model_3, vcov = vcovHC(model_3, type = "HC0"))
+#anova(model_1, model_4, test = "F")
+```
+\begin{table}[!htbp] \centering 
+  \caption{OLS model of revenue based on total budget and animation genre} 
+  \label{} 
+\begin{tabular}{@{\extracolsep{5pt}}lccc} 
+\\[-1.8ex]\hline 
+\hline \\[-1.8ex] 
+ & \multicolumn{3}{c}{\textit{Dependent variable:}} \\ 
+\cline{2-4} 
+\\[-1.8ex] & \multicolumn{3}{c}{Revenue} \\ 
+\\[-1.8ex] & (1) & (2) & (3)\\ 
+\hline \\[-1.8ex] 
+ Budget (\$) & 2.96$^{***}$ & 2.84$^{***}$ & 3.76$^{***}$ \\ 
+  & (0.14) & (0.15) & (0.14) \\ 
+  & & & \\ 
+ Animation &  & 60,293,601.00$^{**}$ & 55,734,381.00 \\ 
+  &  & (23,706,346.00) & (44,044,819.00) \\ 
+  & & & \\ 
+  I(Budget\textasteriskcentered  Animation) &  &  & 0.23 \\ 
+  &  &  & (0.49) \\ 
+  & & & \\ 
+ Constant & $-$5,267,642.00 & $-$5,595,362.00 & $-$15,103,926.00$^{*}$ \\ 
+  & (7,544,067.00) & (7,442,603.00) & (8,798,104.00) \\ 
+  & & & \\ 
+\hline \\[-1.8ex] 
+Observations & 199 & 199 & 461 \\ 
+R$^{2}$ & 0.68 & 0.69 & 0.66 \\ 
+Adjusted R$^{2}$ & 0.68 & 0.69 & 0.66 \\ 
+Residual Std. Error & 82,412,363.00 (df = 197) & 81,291,772.00 (df = 196) & 148,244,676.00 (df = 457) \\ 
+F Statistic & 426.04$^{***}$ (df = 1; 197) & 222.17$^{***}$ (df = 2; 196) & 299.27$^{***}$ (df = 3; 457) \\ 
+\hline 
+\hline \\[-1.8ex] 
+\textit{Note:}  & \multicolumn{3}{r}{$^{*}$p$<$0.1; $^{**}$p$<$0.05; $^{***}$p$<$0.01} \\ 
+\end{tabular} 
+\end{table} 
+As Table 1 shows above, the budget was highly statistically significant for every model for all three models. Point estimates range from 2.84 to 3.76, which indicates that for every \$1.00 we invest in a movie’s budget, we could predict that we would be able to generate anywhere from \$2.84 to \$3.76 in revenue, with all else held constant. After testing all 17 different models, we concluded that animation was the only genre that showed statistical significance. Thus we narrowed down to just the animation index in the second model. The coefficient indicates that if we decide to create an animation movie as opposed to other movie genres, we should be able to generate an additional 60 million dollars in revenue, assuming budget stays constant. However, the variance suggests that this could range from about 37 to 83 million dollars. The third model is the revenue regressed on budget, animation and the interaction between the budget and animation. The interaction variable was included to test whether the changes in budget and animation together will impact the statistical significance of the model overall. The results indicate that it is not statistically significant, meaning the two predictor variables together do not necessarily have an impact on the response variable. 
+\begin{table}[!htbp] \centering 
+  \caption{Budget - Animation ANOVA results} 
+  \label{} 
+\centering
+\begin{tabular}{lrrrrrr}
+  \hline
+ & Res.Df & RSS & Df & Sum of Sq & F & Pr($>$F) \\ 
+  \hline
+1 & 459 & 10188608152641974272.00 &  &  &  &  \\ 
+2 & 458 & 10048140015336714240.00 & 1 & 140468137305260032.00 & 6.40 & 0.0117 \\ 
+   \hline
+\end{tabular}
+\end{table}
+The ANOVA table shown above also indicates that during our initial training, there was an indicator showing that animation was significantly improving our explanation of revenue variance (Model 1: Revenue ~ Budget vs. Model 2: Revenue ~ Budget + Animation). Lastly, our model which includes an interaction indicates that there is no statistically significant interaction between budget and the animation genre.
+```{r, test model 5 rev~budget+animation+interaction, message=FALSE, echo=FALSE}
+model_5 <- lm(revenue ~ budget + AnimationInd + I(budget * AnimationInd), data = df_mod_test)
+
+#summary(model_6)
+
+#coeftest(model_6, vcov = vcovHC(model_6))
+```
+```{r, message=FALSE, echo=FALSE}
+model_7 <- lm(revenue ~ budget + AnimationInd + I(budget*AnimationInd), data= df_mod_test)
+#summary(model_7)
+#anova(model_7)
+```
+```{r, indexing train set df_mod_train, echo = FALSE, message=FALSE}
+#using confirmation data set
+DramaInd_train <- ifelse(grepl("Drama", train$genre),1,0)
+ComedyInd_train  <- ifelse(grepl("Comedy", train$genre),1,0)
+FantasyInd_train  <- ifelse(grepl("Fantasy", train$genre),1,0)
+WarInd_train  <- ifelse(grepl("War", train$genre),1,0)
+WesternInd_train  <- ifelse(grepl("Western", train$genre),1,0)
+SciFiInd_train  <- ifelse(grepl("Science Fiction", train$genre),1,0)
+HistoryInd_train  <- ifelse(grepl("History", train$genre),1,0)
+RomanceInd_train  <- ifelse(grepl("Romance", train$genre),1,0)
+FamilyInd_train  <- ifelse(grepl("Family", train$genre),1,0)
+MysteryInd_train  <- ifelse(grepl("Mystery", train$genre),1,0)
+AnimationInd_train  <- ifelse(grepl("Animation", train$genre),1,0)
+CrimeInd_train  <- ifelse(grepl("Crime", train$genre),1,0)
+ThrillerInd_train  <- ifelse(grepl("Thriller", train$genre),1,0)
+ActionInd_train  <- ifelse(grepl("Action", train$genre),1,0)
+HorrorInd_train  <- ifelse(grepl("Horror", train$genre),1,0)
+DocumentaryInd_train  <- ifelse(grepl("Documentary", train$genre),1,0)
+df_mod_train <- cbind(train[,c(1,3,4,5)], DramaInd_train, ComedyInd_train, FantasyInd_train, WarInd_train, WesternInd_train, SciFiInd_train,HistoryInd_train, RomanceInd_train, FamilyInd_train, MysteryInd_train, AnimationInd_train, CrimeInd_train, ThrillerInd_train, ActionInd_train, HorrorInd_train, DocumentaryInd_train)
+```
+```{r, train model 6 rev~budget, echo= FALSE, message=FALSE}
+model_6 <- lm(revenue ~ budget, data = df_mod_train)
+```
+```{r, train model 7 rev~budget + release year, echo= FALSE, message=FALSE}
+model_7 <- lm(revenue ~ budget + release_year, data = df_mod_train)
+```
+```{r, train model 8 rev~budget + genres, echo= FALSE, message=FALSE}
+model_8 <- lm(revenue ~ budget + DramaInd_train + ComedyInd_train + FantasyInd_train+ WarInd_train+ WesternInd_train+ SciFiInd_train + HistoryInd_train+ RomanceInd_train+ FamilyInd_train+ MysteryInd_train + AnimationInd_train + CrimeInd_train + ThrillerInd_train + ActionInd_train + HorrorInd_train + DocumentaryInd_train, data = df_mod_train)
+```
+```{r, train model 9 rev~budget + animation, echo= FALSE, message=FALSE}
+model_9 <- lm(revenue ~ budget + AnimationInd_train, data= df_mod_train)
+```
+```{r, train model 10 rev~budget + animation +interaction, echo= FALSE, message=FALSE}
+model_10 <- lm(revenue ~ budget + AnimationInd_train +  I(budget * AnimationInd_train), data= df_mod_train)
+# stargazer(
+#   model_1,model_4,model_10,
+#   header = FALSE,
+#   title = "OLS model of revenue based on total budget and animation genre",
+#   dep.var.labels = c("Revenue"),
+#   covariate.labels = c("Budget (\\$)",
+#                        "Animation"),
+#     digits = 2,
+#   type = "latex"
+#  )
+```
+```{r, echo= FALSE, message=FALSE}
+# library(xtable)
+# xtable(anova(model_6, model_9, test = "F"))
+```
+\newpage
+#### 4. Limitations
+\hfill\break
+When creating our explanatory model, large sample model assumptions require an assumption of independent and identically distributed observations. This assumption is reasonably met since the characteristics and financial performance of one movie do not tell us anything about how another movie might fare at the box office. However, it must be noted that this assumption may be slightly violated due to the fact that some movies are sequels and prequels to other movies. Although every movie is taken from the same distribution of each year, we can definitely not rule out that some movies’ budgets may be influenced by the contents of other movies. This is why we originally added the release date to account for not only movies having a longer time to generate revenue, but also to account for related films. Another noteworthy point that was acknowledged was the presence of the same actor (or numerous actors) in multiple movies. While this situation does indeed exist in the industry, data for this is challenging to collect and so we assumed that it would not uniquely interfere with our model since a single actor (or numerous actors) cannot work on a large number of movies simultaneously due to timing constraints.
+
+Large sample model assumptions also state that the population distribution is described by a unique best linear predictor (BLP). In accordance with this assumption, our team does not see any evidence of highly skewed distributions in any diagnostic plot. Therefore, we can conclude that there is a finite amount of variance and that a unique BLP does in fact exist. To be safe, we looked at the variance inflation factor and saw that it is 1.025, indicating that there is no perfect collinearity among the predictors.
+
+When addressing structural limitations, there are multiple omitted variables that could potentially influence our estimates. Monetary investment being divided across movie elements such as casting, graphics, set, marketing campaigns (typically excluded from production budget completely), filing for rights, and other expenses when bringing a movie to the box office results in a few examples of variables that can impact our model. Specifically, the marketing budget allotted to a film is an example of an omitted variable in the context of this study. The marketing budget of a film would be positively correlated with both the revenue generated and the overall budget of said film. Therefore, the omitted variable bias would be positive in nature. Furthermore, when taking into consideration that the overall budget is also positively correlated with the revenue, we end up with the direction of bias as moving away from 0. A similar analysis holds for other variables such as actors, film directors, and production companies.
+
+#### 5. Conclusion
+\hfill\break
+This study sought to predict the financial revenue generated for a movie at the box office through the genre that it is classified as. Of the genres examined, only animation was determined to be a statistically significant feature when explaining the variance of revenues generated by movies. We were also able to determine that the budget for a movie was a statistically significant feature that was present in all of our proposed models. Higher budget movies do tend to attract larger audiences and have larger marketing budgets, therefore leading to larger revenues since they can afford to drive up demand, have top talent casting, and have high fidelity graphics. 
+
+Future research may desire to collect data on movies exclusively released in other countries (besides the USA) around the world. A similar analysis like the one done in this study could help determine which genres generate higher revenues in those countries. Ultimately, companies who release movies globally could focus their marketing efforts on countries where the most influential genre mirrors that of the movie that is about to be released. This would allow for maximized revenue from a film and incentivize companies to continue releasing films of a similar nature and subsequently marketing them to interested countries. Additionally, the research into this topic can be further advanced if one were to study the profitability (revenue minus expenses) of films across different genres with an added correction for monetary inflation over time. The statistically significant features of these explanatory models could prove to be vital information for a production studio seeking to gain a substantial competitive edge in the film industry.  
+```{r, echo=FALSE, message=FALSE}
+#library(leaps)
+# Run backwards elimination selection
+#Backwardout <- regsubsets(revenue ~ budget + release_year + DramaInd + ComedyInd + FantasyInd + WarInd + WesternInd + SciFiInd +HistoryInd + RomanceInd + FamilyInd + MysteryInd + AnimationInd + CrimeInd + ThrillerInd + ActionInd + HorrorInd + DocumentaryInd, data = df_mod, method = "backward")
+# Find the model with the highest adjusted R^2
+#B_BestAdjR2= which.max(summary(Backwardout)$adjr2)
+#coef(Backwardout,B_BestAdjR2)
+```
+```{r, echo=FALSE, message=FALSE}
+#summary(lm(revenue ~ budget + release_year  + FantasyInd + SciFiInd +HistoryInd + AnimationInd + CrimeInd + HorrorInd, data = df_mod))
+```
+
+
