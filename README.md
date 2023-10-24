@@ -18,7 +18,7 @@
 - 🌱 **I’m currently learning:** business analytics and machine learning at scale
 - 👯 **I’m currently completing a degree in:** Master of Information and Data Science at UC Berkeley
 - ⭐ **I'm expecting to graduate in:** May 2024!
-- 💬 **Hobbies:** running, hiking, petting my dogs, hanging out with friends in PNW weather
+- 💬 **Hobbies:** running, hiking, petting my dogs, hanging out with friends in PNW weather, finding new hobbies
 - 😄 **Pronouns:** she/her
 
 ---
